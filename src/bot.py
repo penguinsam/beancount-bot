@@ -114,8 +114,13 @@ def parse_message(msg):
     leg_to = (data[2 * leg_num], sum_amounts, currency)
     legs.append(leg_to)
     note_ = data[2 * leg_num + 1:]
+    payee = ''.join(n for n in note_ if "@" in n)
+    tags = ' '.join(n for n in note_ if "#" in n)
+
+    prefixes = ('@', '#')
+    note_ = [x for x in note_ if not x.startswith(prefixes)]
     note = ' '.join(note_)
-    return legs, note
+    return legs, payee.lstrip("@"), note, tags
 
 
 async def bean(update: Update, context: CustomContext) -> None:
@@ -126,7 +131,7 @@ async def bean(update: Update, context: CustomContext) -> None:
         message = update.message.text
         accounts = context.bot_data.accounts
         try:
-            legs, note = parse_message(message)
+            legs, payee, note, tags = parse_message(message)
         except Exception as e:
             print(str(e))
             response = 'error, {}'.format(str(e))
@@ -143,7 +148,8 @@ async def bean(update: Update, context: CustomContext) -> None:
         flag_mark = '!' if flags > 0 else '*'
         date = datetime.now().strftime("%Y-%m-%d")
 
-        transactions = f"""{date} {flag_mark} "" "{note}"{transactions}
+        transactions = f"""
+{date} {flag_mark} "{payee}" "{note}" {tags}{transactions}
 """
         
         with open(BEANCOUNT_OUTPUT, 'a+') as f:

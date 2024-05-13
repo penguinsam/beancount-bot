@@ -49,6 +49,14 @@ example:
         Income:Bonus:Alibaba -1.88 CNY
         Expenses:Food:Fruit 50.00 CNY
     ```
+
+3. `Cash 41 Restaurents 午餐 @吉野家 #family` generates
+
+    ```
+    2024-05-13 * "吉野家" "午餐" #family
+        Assets:Cash:HKD -41.00 HKD
+        Expenses:Food:Restaurent 41.00 HKD
+    ```
 ## TODO
 
 - [x] fuzzy match
