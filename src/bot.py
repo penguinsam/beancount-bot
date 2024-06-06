@@ -143,13 +143,13 @@ async def bean(update: Update, context: CustomContext) -> None:
             amount = Decimal(float(_amount)).quantize(Decimal('0.00'))
             account, flag = get_account(_account, accounts)
             flags = flags + flag
-            transactions = transactions + '\n    ' + account + ' ' + str(amount) + ' ' + currency
+            transactions = transactions + '\n  ' + account + ' ' + str(amount) + ' ' + currency
 
         flag_mark = '!' if flags > 0 else '*'
         date = datetime.now().strftime("%Y-%m-%d")
 
         transactions = f"""
-{date} {flag_mark} "{payee}" "{note}" {tags}{transactions}
+{date} {flag_mark} "{payee}" "{note}"{tags}{transactions}
 """
         
         with open(BEANCOUNT_OUTPUT, 'a+') as f:
